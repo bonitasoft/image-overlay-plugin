@@ -3,7 +3,7 @@
 
     <groupId>org.bonitasoft.maven</groupId>
     <artifactId>image-overlay-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Image overlay plugin</name>
