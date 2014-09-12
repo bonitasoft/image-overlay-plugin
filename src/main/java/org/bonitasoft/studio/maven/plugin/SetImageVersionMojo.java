@@ -69,6 +69,9 @@ public class SetImageVersionMojo extends AbstractMojo {
     @Parameter(required = false, defaultValue = "true")
     private boolean bold;
 
+    @Parameter(required = false, defaultValue = "false")
+    private boolean italic;
+
     /* (non-Javadoc)
      * @see org.apache.maven.plugin.Mojo#execute()
      */
@@ -85,6 +88,7 @@ public class SetImageVersionMojo extends AbstractMojo {
         setImageVersion.setxLocation(xLocation);
         setImageVersion.setyLocation(yLocation);
         setImageVersion.setBold(bold);
+        setImageVersion.setItalic(italic);
         if(fontName != null){
             if(fontResourcePath == null){
                 throw new MojoFailureException("You must provide a custom font resourcefile when using a custom font name.");

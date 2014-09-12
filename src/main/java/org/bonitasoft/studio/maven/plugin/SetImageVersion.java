@@ -54,6 +54,7 @@ public class SetImageVersion {
     private int yLocation;
     private String outputImagePath;
     private boolean isBold = false;
+    private boolean isItalic = false;
 
     private float size;
     private String color = "#ffffff"; //white
@@ -147,7 +148,9 @@ public class SetImageVersion {
     protected Font configureFontStyle(final Font bontitaBrandingFont) {
         final Map<TextAttribute, Object> attributes = new HashMap<TextAttribute, Object>();
         attributes.put(TextAttribute.WIDTH, TextAttribute.WIDTH_SEMI_CONDENSED);
-        attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+        if (isItalic) {
+            attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+        }
         if (isBold) {
             attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         } else {
@@ -264,6 +267,10 @@ public class SetImageVersion {
 
     public void setBold(final boolean isBold) {
         this.isBold = isBold;
+    }
+
+    public void setItalic(final boolean isItalic) {
+        this.isItalic = isItalic;
     }
 
 }
