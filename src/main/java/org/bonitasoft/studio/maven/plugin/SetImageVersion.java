@@ -5,12 +5,10 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2.0 of the License, or
  * (at your option) any later version.
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,10 +34,8 @@ import javax.imageio.ImageIO;
 
 import org.bonitasoft.studio.maven.plugin.exception.CreateImageException;
 
-
 /**
  * @author Romain Bioteau
- *
  */
 public class SetImageVersion {
 
@@ -49,6 +45,9 @@ public class SetImageVersion {
     private String fontName;
     private String fontResourcePath;
     private String versionLabel;
+    private String qualifierLabel;
+    private int qualifierX;
+    private int qualifierY;
     private String outputImageFormat; //bmp,jpg,png..
     private int xLocation;
     private int yLocation;
@@ -58,7 +57,6 @@ public class SetImageVersion {
 
     private float size;
     private String color = "#ffffff"; //white
-
 
     public void createImage() throws CreateImageException {
         configure();
@@ -146,7 +144,7 @@ public class SetImageVersion {
     }
 
     protected Font configureFontStyle(final Font bontitaBrandingFont) {
-        final Map<TextAttribute, Object> attributes = new HashMap<TextAttribute, Object>();
+        final Map<TextAttribute, Object> attributes = new HashMap<>();
         attributes.put(TextAttribute.WIDTH, TextAttribute.WIDTH_SEMI_CONDENSED);
         if (isItalic) {
             attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
@@ -160,8 +158,7 @@ public class SetImageVersion {
     }
 
     private Font createCustomFont() throws FontFormatException, IOException {
-        final GraphicsEnvironment ge =
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
+        final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font customFont = getFont(ge);
         if (customFont == null) {
             InputStream fontInputStream = null;
@@ -273,4 +270,15 @@ public class SetImageVersion {
         this.isItalic = isItalic;
     }
 
+    public void setQualifierLabel(String qualifierLabel) {
+        this.qualifierLabel = qualifierLabel;
+    }
+
+    public void setQualifierX(int qualifierX) {
+        this.qualifierX = qualifierX;
+    }
+
+    public void setQualifierY(int qualifierY) {
+        this.qualifierY = qualifierY;
+    }
 }
