@@ -22,9 +22,9 @@ import static org.mockito.Mockito.doNothing;
 import java.io.File;
 
 import org.bonitasoft.studio.maven.plugin.exception.CreateImageException;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -40,25 +40,9 @@ public class SetImageVersionTest {
     @Spy
     private SetImageVersion setImageVersion;
 
-    private File tmpOutputFile;
+    @Rule
+    public TemporaryFolder tmpFolder = new TemporaryFolder();
 
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        tmpOutputFile = new File(System.getProperty("java.io.tmpdir"), "splash.bmp");
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        if (tmpOutputFile.exists()) {
-            tmpOutputFile.delete();
-        }
-    }
 
     @Test(expected = IllegalArgumentException.class)
     public void must_have_a_valid_configuration() throws Exception {
@@ -72,7 +56,7 @@ public class SetImageVersionTest {
         setImageVersion.setyLocation(200);
         setImageVersion.setVerisonLabel("6.4.0");
         setImageVersion.setOutputImageFormat("bmp");
-        setImageVersion.setOutputImagePath(tmpOutputFile.getAbsolutePath());
+        setImageVersion.setOutputImagePath(tmpFolder.newFile("splash.bmp").getAbsolutePath());
         setImageVersion.createImage();
     }
 
@@ -84,7 +68,7 @@ public class SetImageVersionTest {
         setImageVersion.setyLocation(200);
         setImageVersion.setVerisonLabel(null);
         setImageVersion.setOutputImageFormat("bmp");
-        setImageVersion.setOutputImagePath(tmpOutputFile.getAbsolutePath());
+        setImageVersion.setOutputImagePath(tmpFolder.newFile("splash.bmp").getAbsolutePath());
         setImageVersion.createImage();
     }
 
@@ -96,7 +80,7 @@ public class SetImageVersionTest {
         setImageVersion.setyLocation(200);
         setImageVersion.setVerisonLabel("6.4.0");
         setImageVersion.setOutputImageFormat(null);
-        setImageVersion.setOutputImagePath(tmpOutputFile.getAbsolutePath());
+        setImageVersion.setOutputImagePath(tmpFolder.newFile("splash.bmp").getAbsolutePath());
         setImageVersion.createImage();
     }
 
@@ -113,20 +97,39 @@ public class SetImageVersionTest {
     }
 
     @Test
-    public void create_image_write_a_valid_file() throws Exception {
+    public void create_image_write_a_bmp_valid_file() throws Exception {
         setImageVersion.setBaseImgPath(new File(SetImageVersionTest.class.getResource("/splash_sp_without_version.bmp").getFile())
         .getAbsolutePath());
         setImageVersion.setxLocation(200);
         setImageVersion.setyLocation(200);
         setImageVersion.setVerisonLabel("6.4.0");
         setImageVersion.setOutputImageFormat("bmp");
-        setImageVersion.setOutputImagePath(tmpOutputFile.getAbsolutePath());
+        File newFile = tmpFolder.newFile("splash.bmp");
+		setImageVersion.setOutputImagePath(newFile.getAbsolutePath());
         setImageVersion.createImage();
-        assertThat(tmpOutputFile).exists().canRead();
+        assertThat(newFile).exists().canRead();
 
         setImageVersion.setVerisonLabel("6.4.1");
         setImageVersion.createImage();
-        assertThat(tmpOutputFile).exists().canRead();
+        assertThat(newFile).exists().canRead();
+    }
+    
+    @Test
+    public void create_image_write_a_valid_png_file() throws Exception {
+        setImageVersion.setBaseImgPath(new File(SetImageVersionTest.class.getResource("/Logo-Welcome-Community-Without-Version.png").getFile())
+        .getAbsolutePath());
+        setImageVersion.setxLocation(192);
+        setImageVersion.setyLocation(78);
+        setImageVersion.setItalic(true);
+        setImageVersion.setBold(true);
+        setImageVersion.setSize(35);
+        setImageVersion.setColor("#0b4361");
+        setImageVersion.setVerisonLabel("7.6.0");
+        setImageVersion.setOutputImageFormat("png");
+        File newFile = tmpFolder.newFile("splash.png");
+		setImageVersion.setOutputImagePath(newFile.getAbsolutePath());
+        setImageVersion.createImage();
+        assertThat(newFile).exists().canRead();
     }
 
     @Test
@@ -142,7 +145,7 @@ public class SetImageVersionTest {
         setImageVersion.setyLocation(200);
         setImageVersion.setVerisonLabel("6.4.0");
         setImageVersion.setOutputImageFormat("bmp");
-        setImageVersion.setOutputImagePath(tmpOutputFile.getAbsolutePath());
+        setImageVersion.setOutputImagePath(tmpFolder.newFile("splash.bmp").getAbsolutePath());
         setImageVersion.createImage();
     }
 
@@ -156,7 +159,7 @@ public class SetImageVersionTest {
         setImageVersion.setyLocation(200);
         setImageVersion.setVerisonLabel("6.4.0");
         setImageVersion.setOutputImageFormat("bmp");
-        setImageVersion.setOutputImagePath(tmpOutputFile.getAbsolutePath());
+        setImageVersion.setOutputImagePath(tmpFolder.newFile("splash.bmp").getAbsolutePath());
         setImageVersion.setFontName("invalid");
         setImageVersion.setFontResourcePath(absolutePath);
         setImageVersion.createImage();

@@ -19,6 +19,7 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
+import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
@@ -66,13 +67,18 @@ public class SetImageVersion {
         checkArgumentsNotNull(outputImagePath, "outputImagePath");
         checkArgumentsNotNull(outputImageFormat, "outputImageFormat");
 
-        BufferedImage loadImg;
+        BufferedImage loadImg = null;
         try {
             loadImg = loadBaseImage();
         } catch (final IOException e) {
             throw new CreateImageException(e.getMessage(), e);
         }
-        final Graphics2D graphics = loadImg.createGraphics();
+        
+        BufferedImage img = new BufferedImage(
+        		loadImg.getWidth(), loadImg.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = img.createGraphics();
+        graphics.drawImage(loadImg, 0, 0,loadImg.getWidth(),loadImg.getHeight(),null);
+        
 
         Font bontitaBrandingFont = null;
         try {
@@ -88,12 +94,20 @@ public class SetImageVersion {
         graphics.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, 
+        		RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, 
+        		RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        graphics.setRenderingHint(RenderingHints.KEY_RENDERING, 
+        		RenderingHints.VALUE_RENDER_QUALITY);
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
+        		RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         graphics.drawString(getVersionLabel(), getxLocation(), getyLocation());
         graphics.dispose();
 
         try {
-            writeOutputImage(loadImg);
+            writeOutputImage(img);
         } catch (final IOException e) {
             throw new CreateImageException(e.getMessage(), e);
         }
@@ -146,6 +160,7 @@ public class SetImageVersion {
     protected Font configureFontStyle(final Font bontitaBrandingFont) {
         final Map<TextAttribute, Object> attributes = new HashMap<>();
         attributes.put(TextAttribute.WIDTH, TextAttribute.WIDTH_SEMI_CONDENSED);
+        attributes.put(TextAttribute.BACKGROUND, Paint.TRANSLUCENT);
         if (isItalic) {
             attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
         }
