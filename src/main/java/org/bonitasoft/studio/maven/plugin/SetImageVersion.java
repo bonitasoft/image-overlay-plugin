@@ -73,12 +73,11 @@ public class SetImageVersion {
         } catch (final IOException e) {
             throw new CreateImageException(e.getMessage(), e);
         }
-        
+
         BufferedImage img = new BufferedImage(
-        		loadImg.getWidth(), loadImg.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                loadImg.getWidth(), loadImg.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = img.createGraphics();
-        graphics.drawImage(loadImg, 0, 0,loadImg.getWidth(),loadImg.getHeight(),null);
-        
+        graphics.drawImage(loadImg, 0, 0, loadImg.getWidth(), loadImg.getHeight(), null);
 
         Font bontitaBrandingFont = null;
         try {
@@ -94,14 +93,14 @@ public class SetImageVersion {
         graphics.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, 
-        		RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        graphics.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, 
-        		RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-        graphics.setRenderingHint(RenderingHints.KEY_RENDERING, 
-        		RenderingHints.VALUE_RENDER_QUALITY);
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
-        		RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+                RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        graphics.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY);
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         graphics.drawString(getVersionLabel(), getxLocation(), getyLocation());
         graphics.dispose();
@@ -114,7 +113,10 @@ public class SetImageVersion {
     }
 
     protected void writeOutputImage(final BufferedImage loadImg) throws IOException {
-        ImageIO.write(loadImg, getOutputImageFormat(), new File(getOutputImagePath()));
+        if (!ImageIO.write(loadImg, getOutputImageFormat(), new File(getOutputImagePath()))) {
+            throw new IOException(String.format("Failed to create image %s with &s fromat.", getOutputImagePath(),
+                    getOutputImageFormat()));
+        }
     }
 
     private BufferedImage loadBaseImage() throws IOException {
