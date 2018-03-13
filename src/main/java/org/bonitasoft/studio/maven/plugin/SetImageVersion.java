@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
@@ -75,7 +76,7 @@ public class SetImageVersion {
         }
 
         BufferedImage img = new BufferedImage(
-                loadImg.getWidth(), loadImg.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                loadImg.getWidth(), loadImg.getHeight(), getType());
         Graphics2D graphics = img.createGraphics();
         graphics.drawImage(loadImg, 0, 0, loadImg.getWidth(), loadImg.getHeight(), null);
 
@@ -112,9 +113,14 @@ public class SetImageVersion {
         }
     }
 
+    private int getType() {
+        return Objects.equals(getOutputImageFormat().toLowerCase(), "bmp") ? BufferedImage.TYPE_INT_RGB
+                : BufferedImage.TYPE_INT_ARGB;
+    }
+
     protected void writeOutputImage(final BufferedImage loadImg) throws IOException {
         if (!ImageIO.write(loadImg, getOutputImageFormat(), new File(getOutputImagePath()))) {
-            throw new IOException(String.format("Failed to create image %s with &s fromat.", getOutputImagePath(),
+            throw new IOException(String.format("Failed to create image %s with %s fromat.", getOutputImagePath(),
                     getOutputImageFormat()));
         }
     }
