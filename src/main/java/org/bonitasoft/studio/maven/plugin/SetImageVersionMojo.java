@@ -44,12 +44,15 @@ public class SetImageVersionMojo extends AbstractMojo {
 
     @Parameter(required = true)
     private int yLocation;
-    
+
     @Parameter(required = false)
     private int qualifierX;
 
     @Parameter(required = false)
     private int qualifierY;
+    
+    @Parameter(required = false, defaultValue = "false")
+    private boolean showQualifier = false;
 
     @Parameter(required = true)
     private String versionLabel;
@@ -65,9 +68,6 @@ public class SetImageVersionMojo extends AbstractMojo {
 
     @Parameter(required = false)
     private String color;
-
-    @Parameter(required = false, defaultValue = "false")
-    private boolean showQualifier;
 
     @Parameter(required = false, defaultValue = "true")
     private boolean bold;
@@ -86,20 +86,18 @@ public class SetImageVersionMojo extends AbstractMojo {
         setImageVersion.setOutputImageFormat(outputImageFormat);
         setImageVersion.setOutputImagePath(outputImagePath);
 
-        final String formattedVersion = format(versionLabel);
-        setImageVersion.setVerisonLabel(formattedVersion);
-        if (showQualifier && hasQualifier(versionLabel)) {
-            setImageVersion.setQualifierLabel(qualifier(versionLabel));
-            setImageVersion.setQualifierX(qualifierX);
-            setImageVersion.setQualifierY(qualifierY);
-        }
+        setImageVersion.setVersionLabel(versionLabel);
+        setImageVersion.setShowQualifier(showQualifier);
+        setImageVersion.setQualifierX(qualifierX);
+        setImageVersion.setQualifierY(qualifierY);
         setImageVersion.setxLocation(xLocation);
         setImageVersion.setyLocation(yLocation);
         setImageVersion.setBold(bold);
         setImageVersion.setItalic(italic);
         if (fontName != null) {
             if (fontResourcePath == null) {
-                throw new MojoFailureException("You must provide a custom font resourcefile when using a custom font name.");
+                throw new MojoFailureException(
+                        "You must provide a custom font resourcefile when using a custom font name.");
             }
             setImageVersion.setFontName(fontName);
             setImageVersion.setFontResourcePath(fontResourcePath);
@@ -127,50 +125,10 @@ public class SetImageVersionMojo extends AbstractMojo {
         }
     }
 
-    private String qualifier(String version) {
-        if (hasQualifier(version)) {
-            final String[] versions = version.split("\\.");
-            return versions[3];
-        }
-        throw new IllegalArgumentException(String.format("Version has no qualifier: %s", version));
-    }
-
-    private boolean hasQualifier(String version) {
-        final String[] versions = version.split("\\.");
-        return versions.length >= 4;
-    }
-
-    private String format(String version) {
-        if (version != null) {
-            final String[] versions = version.split("\\.");
-            if(versions.length < 3){
-                throw new IllegalArgumentException(String.format("Invalid version format: %s", version));
-            }
-            String newVersion = versions[0] + "." + versions[1];
-            String maintenanceVersion = versions[2];
-            if (maintenanceVersion.endsWith("-SNAPSHOT")) {
-                maintenanceVersion = maintenanceVersion.substring(0, maintenanceVersion.indexOf("-SNAPSHOT"));
-            }
-            //Version contains a tag id
-            if (maintenanceVersion.indexOf(".") != -1) {
-                final String[] splitTag = maintenanceVersion.split("\\.");
-                maintenanceVersion = splitTag[0];
-                if (showQualifier) {
-
-                }
-            }
-            newVersion = newVersion + "." + maintenanceVersion;
-            return newVersion;
-        }
-        return version;
-    }
+   
 
     public void setVersionLabel(String versionLabel) {
         this.versionLabel = versionLabel;
-    }
-
-    public void setShowQualifier(boolean showQualifier) {
-        this.showQualifier = showQualifier;
     }
 
     protected SetImageVersion createSetImageVersion() {

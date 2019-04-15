@@ -47,7 +47,6 @@ public class SetImageVersion {
     private String fontName;
     private String fontResourcePath;
     private String versionLabel;
-    private String qualifierLabel;
     private int qualifierX;
     private int qualifierY;
     private String outputImageFormat; //bmp,jpg,png..
@@ -60,6 +59,8 @@ public class SetImageVersion {
     private float size;
     private String color = "#ffffff"; //white
 
+    private boolean showQualifier;
+
     public void createImage() throws CreateImageException {
         configure();
         checkArgumentsNotNull(baseImgPath, "baseImgPath");
@@ -67,6 +68,13 @@ public class SetImageVersion {
         checkArgumentsNotNull(versionLabel, "versionLabel");
         checkArgumentsNotNull(outputImagePath, "outputImagePath");
         checkArgumentsNotNull(outputImageFormat, "outputImageFormat");
+
+        Font font;
+        try {
+            font = createCustomFont();
+        } catch (FontFormatException | IOException e) {
+            throw new CreateImageException("Failed to load font.", e);
+        }
 
         BufferedImage loadImg = null;
         try {
@@ -77,20 +85,21 @@ public class SetImageVersion {
 
         BufferedImage img = new BufferedImage(
                 loadImg.getWidth(), loadImg.getHeight(), getType());
-        Graphics2D graphics = img.createGraphics();
-        graphics.drawImage(loadImg, 0, 0, loadImg.getWidth(), loadImg.getHeight(), null);
-
-        Font bontitaBrandingFont = null;
+        drawProductVersion(loadImg, img, font);
         try {
-            bontitaBrandingFont = createCustomFont();
-        } catch (final FontFormatException e) {
-            throw new CreateImageException(e.getMessage(), e);
+            writeOutputImage(img);
         } catch (final IOException e) {
             throw new CreateImageException(e.getMessage(), e);
         }
+    }
+
+    private void drawProductVersion(BufferedImage loadImg, BufferedImage img, Font bontitaBrandingFont)
+            throws CreateImageException {
+        Graphics2D graphics = img.createGraphics();
+        graphics.drawImage(loadImg, 0, 0, loadImg.getWidth(), loadImg.getHeight(), null);
 
         graphics.setColor(Color.decode(color));
-        graphics.setFont(configureFontStyle(bontitaBrandingFont));
+        graphics.setFont(configureVersionFontStyle(bontitaBrandingFont));
         graphics.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -103,14 +112,13 @@ public class SetImageVersion {
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        graphics.drawString(getVersionLabel(), getxLocation(), getyLocation());
-        graphics.dispose();
-
-        try {
-            writeOutputImage(img);
-        } catch (final IOException e) {
-            throw new CreateImageException(e.getMessage(), e);
+        String _3digitVersion = format(getVersionLabel());
+        graphics.drawString(_3digitVersion, getxLocation(), getyLocation());
+        if (showQualifier && !Objects.equals(_3digitVersion, versionLabel)) {
+            graphics.setFont(configureQualifierFontStyle(bontitaBrandingFont));
+            graphics.drawString(String.format("Build: %s", getVersionLabel()), qualifierX, qualifierY);
         }
+        graphics.dispose();
     }
 
     private int getType() {
@@ -165,7 +173,7 @@ public class SetImageVersion {
         this.baseImgPath = baseImgPath;
     }
 
-    protected Font configureFontStyle(final Font bontitaBrandingFont) {
+    protected Font configureVersionFontStyle(final Font bontitaBrandingFont) {
         final Map<TextAttribute, Object> attributes = new HashMap<>();
         attributes.put(TextAttribute.WIDTH, TextAttribute.WIDTH_SEMI_CONDENSED);
         attributes.put(TextAttribute.BACKGROUND, Paint.TRANSLUCENT);
@@ -178,6 +186,15 @@ public class SetImageVersion {
             attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_LIGHT);
         }
         return bontitaBrandingFont.deriveFont(Font.TRUETYPE_FONT, getSize()).deriveFont(attributes);
+    }
+
+    protected Font configureQualifierFontStyle(final Font bontitaBrandingFont) {
+        final Map<TextAttribute, Object> attributes = new HashMap<>();
+        attributes.put(TextAttribute.WIDTH, TextAttribute.WIDTH_SEMI_CONDENSED);
+        attributes.put(TextAttribute.BACKGROUND, Paint.TRANSLUCENT);
+        attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_REGULAR);
+        attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
+        return bontitaBrandingFont.deriveFont(Font.TRUETYPE_FONT, 15).deriveFont(attributes);
     }
 
     private Font createCustomFont() throws FontFormatException, IOException {
@@ -213,6 +230,27 @@ public class SetImageVersion {
         return null;
     }
 
+    String format(String version) {
+        if (version != null) {
+            final String[] versions = version.split("\\.");
+            if (versions.length < 3) {
+                throw new IllegalArgumentException(String.format("Invalid version format: %s", version));
+            }
+            String newVersion = versions[0] + "." + versions[1];
+            String maintenanceVersion = versions[2];
+            if (maintenanceVersion.endsWith("-SNAPSHOT")) {
+                maintenanceVersion = maintenanceVersion.substring(0, maintenanceVersion.indexOf("-SNAPSHOT"));
+            }
+            //Version contains a tag id
+            if (maintenanceVersion.indexOf(".") != -1) {
+                final String[] splitTag = maintenanceVersion.split("\\.");
+                maintenanceVersion = splitTag[0];
+            }
+            return newVersion + "." + maintenanceVersion;
+        }
+        return version;
+    }
+
     public String getFontName() {
         return fontName;
     }
@@ -225,7 +263,7 @@ public class SetImageVersion {
         return versionLabel;
     }
 
-    public void setVerisonLabel(final String versionLabel) {
+    public void setVersionLabel(final String versionLabel) {
         this.versionLabel = versionLabel;
     }
 
@@ -293,15 +331,15 @@ public class SetImageVersion {
         this.isItalic = isItalic;
     }
 
-    public void setQualifierLabel(String qualifierLabel) {
-        this.qualifierLabel = qualifierLabel;
-    }
-
     public void setQualifierX(int qualifierX) {
         this.qualifierX = qualifierX;
     }
 
     public void setQualifierY(int qualifierY) {
         this.qualifierY = qualifierY;
+    }
+
+    public void setShowQualifier(boolean showQualifier) {
+        this.showQualifier = showQualifier;
     }
 }

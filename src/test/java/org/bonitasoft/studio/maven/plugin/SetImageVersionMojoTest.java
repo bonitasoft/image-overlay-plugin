@@ -23,9 +23,7 @@ import static org.mockito.Mockito.verify;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.bonitasoft.studio.maven.plugin.exception.CreateImageException;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -44,9 +42,6 @@ public class SetImageVersionMojoTest {
 
     @Mock
     private SetImageVersion setImageVersion;
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     /**
      * @throws java.lang.Exception
@@ -69,40 +64,5 @@ public class SetImageVersionMojoTest {
         setImageVersionMojo.execute();
     }
 
-    @Test
-    public void should_format_version_to_3_digits_if_snapshot() throws Exception {
-        setImageVersionMojo.setVersionLabel("1.0.0-SNAPSHOT");
-        setImageVersionMojo.execute();
-        verify(setImageVersion).setVerisonLabel("1.0.0");
-    }
 
-    @Test
-    public void should_format_version_to_3_digits_if_tag() throws Exception {
-        setImageVersionMojo.setVersionLabel("1.0.0.myTagId");
-        setImageVersionMojo.execute();
-        verify(setImageVersion).setVerisonLabel("1.0.0");
-    }
-
-    @Test
-    public void should_format_version_to_3_digits_if_tag_with_specialChars() throws Exception {
-        setImageVersionMojo.setVersionLabel("1.0.0.myTag-Id");
-        setImageVersionMojo.execute();
-        verify(setImageVersion).setVerisonLabel("1.0.0");
-    }
-
-    @Test
-    public void should_throw_IllegalArgumentException_if_version_format_is_not_supported() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        setImageVersionMojo.setVersionLabel("1.0-SNAPSHOT");
-        setImageVersionMojo.execute();
-    }
-
-    @Test
-    public void should_set_qualifier() throws Exception {
-        setImageVersionMojo.setVersionLabel("1.0.0.myTag-Id");
-        setImageVersionMojo.setShowQualifier(true);
-        setImageVersionMojo.execute();
-        verify(setImageVersion).setVerisonLabel("1.0.0");
-        verify(setImageVersion).setQualifierLabel("myTag-Id");
-    }
 }
