@@ -86,10 +86,10 @@
     </build>
 
     <scm>
-        <developerConnection>scm:git:git@github.com:bonitasoft/image-overlay-plugin.git</developerConnection>
-        <connection>scm:git:git@github.com:bonitasoft/image-overlay-plugin.git</connection>
+        <developerConnection>scm:git:https://${env.GIT_USERNAME}:${env.GIT_PASSWORD}@github.com/bonitasoft/image-overlay-plugin.git</developerConnection>
+        <connection>https://${env.GIT_USERNAME}:${env.GIT_PASSWORD}@github.com/bonitasoft/</connection>
         <url>https://github.com/bonitasoft/image-overlay-plugin</url>
-      <tag>HEAD</tag>
+        <tag>HEAD</tag>
   </scm>
 
 </project>
