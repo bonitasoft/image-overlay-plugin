@@ -75,10 +75,7 @@ public class SetImageVersionMojo extends AbstractMojo {
     @Parameter(required = false, defaultValue = "false")
     private boolean italic;
 
-    /*
-     * (non-Javadoc)
-     * @see org.apache.maven.plugin.Mojo#execute()
-     */
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         final SetImageVersion setImageVersion = createSetImageVersion();
