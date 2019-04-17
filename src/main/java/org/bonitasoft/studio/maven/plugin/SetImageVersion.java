@@ -114,11 +114,16 @@ public class SetImageVersion {
 
         String _3digitVersion = format(getVersionLabel());
         graphics.drawString(_3digitVersion, getxLocation(), getyLocation());
+        versionLabel = trimDot(versionLabel) ;
         if (showQualifier && !Objects.equals(_3digitVersion, versionLabel)) {
             graphics.setFont(configureQualifierFontStyle(bontitaBrandingFont));
             graphics.drawString(String.format("Build: %s", getVersionLabel()), qualifierX, qualifierY);
         }
         graphics.dispose();
+    }
+
+    String trimDot(String label) {
+        return label.lastIndexOf(".") == label.length()-1 ? label.substring(0,label.length()-1) : label;
     }
 
     private int getType() {

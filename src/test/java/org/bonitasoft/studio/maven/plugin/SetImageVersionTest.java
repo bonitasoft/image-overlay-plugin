@@ -214,6 +214,11 @@ public class SetImageVersionTest {
     public void should_format_version_to_3_digits_if_tag_with_specialChars() throws Exception {
         assertThat(setImageVersion.format("1.0.0.myTag-Id")).isEqualTo("1.0.0");
     }
+    
+    @Test
+    public void should_trim_dot() throws Exception {
+        assertThat(setImageVersion.trimDot("1.0.0.")).isEqualTo("1.0.0");
+    }
 
     @Test
     public void should_throw_IllegalArgumentException_if_version_format_is_not_supported() throws Exception {
