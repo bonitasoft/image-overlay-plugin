@@ -3,7 +3,7 @@
 
     <groupId>org.bonitasoft.maven</groupId>
     <artifactId>image-overlay-plugin</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.8</version>
     <packaging>maven-plugin</packaging>
 
 	<name>Image overlay plugin</name>
@@ -107,7 +107,7 @@
 		<developerConnection>scm:git:https://${env.GIT_USERNAME}:${env.GIT_PASSWORD}@github.com/bonitasoft/image-overlay-plugin.git</developerConnection>
 		<connection>https://${env.GIT_USERNAME}:${env.GIT_PASSWORD}@github.com/bonitasoft/</connection>
 		<url>https://github.com/bonitasoft/image-overlay-plugin</url>
-		<tag>HEAD</tag>
+		<tag>image-overlay-plugin-1.0.8</tag>
 	</scm>
 
 </project>
