@@ -1,16 +1,19 @@
-/**
- * Copyright (C) 2014 BonitaSoft S.A.
- * BonitaSoft, 32 rue Gustave Eiffel - 38000 Grenoble
+/*
+ * Copyright (C) 2009 - 2020 Bonitasoft S.A.
+ * Bonitasoft, 32 rue Gustave Eiffel - 38000 Grenoble
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2.0 of the License, or
  * (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 package org.bonitasoft.studio.maven.plugin;
 
@@ -19,8 +22,8 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
-import java.awt.Paint;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -93,8 +96,7 @@ public class SetImageVersion {
         }
     }
 
-    private void drawProductVersion(BufferedImage loadImg, BufferedImage img, Font bontitaBrandingFont)
-            throws CreateImageException {
+    private void drawProductVersion(BufferedImage loadImg, BufferedImage img, Font bontitaBrandingFont) {
         Graphics2D graphics = img.createGraphics();
         graphics.drawImage(loadImg, 0, 0, loadImg.getWidth(), loadImg.getHeight(), null);
 
@@ -112,10 +114,10 @@ public class SetImageVersion {
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        String _3digitVersion = format(getVersionLabel());
-        graphics.drawString(_3digitVersion, getxLocation(), getyLocation());
+        String threeDigitVersion = format(getVersionLabel());
+        graphics.drawString(threeDigitVersion, getxLocation(), getyLocation());
         versionLabel = trimDot(versionLabel) ;
-        if (showQualifier && !Objects.equals(_3digitVersion, versionLabel)) {
+        if (showQualifier && !Objects.equals(threeDigitVersion, versionLabel)) {
             graphics.setFont(configureQualifierFontStyle(bontitaBrandingFont));
             graphics.drawString(String.format("Build: %s", getVersionLabel()), qualifierX, qualifierY);
         }
@@ -181,7 +183,7 @@ public class SetImageVersion {
     protected Font configureVersionFontStyle(final Font bontitaBrandingFont) {
         final Map<TextAttribute, Object> attributes = new HashMap<>();
         attributes.put(TextAttribute.WIDTH, TextAttribute.WIDTH_SEMI_CONDENSED);
-        attributes.put(TextAttribute.BACKGROUND, Paint.TRANSLUCENT);
+        attributes.put(TextAttribute.BACKGROUND, Transparency.TRANSLUCENT);
         if (isItalic) {
             attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
         }
@@ -196,7 +198,7 @@ public class SetImageVersion {
     protected Font configureQualifierFontStyle(final Font bontitaBrandingFont) {
         final Map<TextAttribute, Object> attributes = new HashMap<>();
         attributes.put(TextAttribute.WIDTH, TextAttribute.WIDTH_SEMI_CONDENSED);
-        attributes.put(TextAttribute.BACKGROUND, Paint.TRANSLUCENT);
+        attributes.put(TextAttribute.BACKGROUND, Transparency.TRANSLUCENT);
         attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_REGULAR);
         attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         return bontitaBrandingFont.deriveFont(Font.TRUETYPE_FONT, 15).deriveFont(attributes);
@@ -206,23 +208,12 @@ public class SetImageVersion {
         final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font customFont = getFont(ge);
         if (customFont == null) {
-            InputStream fontInputStream = null;
-            try {
-                if (getFontResourcePath() != null) {
-                    final File fontResourceFile = new File(getFontResourcePath());
-                    fontInputStream = new FileInputStream(fontResourceFile);
-                } else {
-                    fontInputStream = getDefaultFontInputStream();
-                }
+            try (InputStream fontInputStream = getFontResourcePath() != null ? new FileInputStream(new File(getFontResourcePath()))
+                    : getDefaultFontInputStream()){
                 customFont = Font.createFont(Font.TRUETYPE_FONT, fontInputStream);
                 ge.registerFont(customFont);
-            } finally {
-                if (fontInputStream != null) {
-                    fontInputStream.close();
-                }
             }
         }
-
         return customFont;
     }
 
