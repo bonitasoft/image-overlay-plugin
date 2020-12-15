@@ -49,16 +49,16 @@ public class SetImageVersionMojo extends AbstractMojo {
     private int yLocation;
 
     @Parameter(required = false)
-    private int qualifierX;
+    private int buildIdX;
 
     @Parameter(required = false)
-    private int qualifierY;
+    private int buildIdY;
     
-    @Parameter(required = false, defaultValue = "false")
-    private boolean showQualifier = false;
-
     @Parameter(required = true)
     private String versionLabel;
+    
+    @Parameter(required = false)
+    private String buildId;
 
     @Parameter(required = false)
     private String fontName;
@@ -85,11 +85,10 @@ public class SetImageVersionMojo extends AbstractMojo {
         setImageVersion.setBaseImgPath(baseImgPath);
         setImageVersion.setOutputImageFormat(outputImageFormat);
         setImageVersion.setOutputImagePath(outputImagePath);
-
         setImageVersion.setVersionLabel(versionLabel);
-        setImageVersion.setShowQualifier(showQualifier);
-        setImageVersion.setQualifierX(qualifierX);
-        setImageVersion.setQualifierY(qualifierY);
+        setImageVersion.setBuildId(buildId);
+        setImageVersion.setBuildIdX(buildIdX);
+        setImageVersion.setBuildIdY(buildIdY);
         setImageVersion.setxLocation(xLocation);
         setImageVersion.setyLocation(yLocation);
         setImageVersion.setBold(bold);
@@ -102,7 +101,6 @@ public class SetImageVersionMojo extends AbstractMojo {
             setImageVersion.setFontName(fontName);
             setImageVersion.setFontResourcePath(fontResourcePath);
         }
-
         if (fontSize > 0) {
             setImageVersion.setSize(fontSize);
         }

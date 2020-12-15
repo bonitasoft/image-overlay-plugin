@@ -50,8 +50,9 @@ public class SetImageVersion {
     private String fontName;
     private String fontResourcePath;
     private String versionLabel;
-    private int qualifierX;
-    private int qualifierY;
+    private String buildId;
+    private int buildIdX;
+    private int buildIdY;
     private String outputImageFormat; //bmp,jpg,png..
     private int xLocation;
     private int yLocation;
@@ -62,7 +63,7 @@ public class SetImageVersion {
     private float size;
     private String color = "#ffffff"; //white
 
-    private boolean showQualifier;
+
 
     public void createImage() throws CreateImageException {
         configure();
@@ -114,12 +115,10 @@ public class SetImageVersion {
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        String threeDigitVersion = format(getVersionLabel());
-        graphics.drawString(threeDigitVersion, getxLocation(), getyLocation());
-        versionLabel = trimDot(versionLabel) ;
-        if (showQualifier && !Objects.equals(threeDigitVersion, versionLabel)) {
+        graphics.drawString(getVersionLabel(), getxLocation(), getyLocation());
+        if (buildId != null && !buildId.isEmpty()) {
             graphics.setFont(configureQualifierFontStyle(bontitaBrandingFont));
-            graphics.drawString(String.format("Build: %s", getVersionLabel()), qualifierX, qualifierY);
+            graphics.drawString(String.format("Build: %s", buildId), buildIdX, buildIdY);
         }
         graphics.dispose();
     }
@@ -226,7 +225,7 @@ public class SetImageVersion {
         return null;
     }
 
-    String format(String version) {
+    String stripVersionQualifier(String version) {
         if (version != null) {
             final String[] versions = version.split("\\.");
             if (versions.length < 3) {
@@ -327,15 +326,15 @@ public class SetImageVersion {
         this.isItalic = isItalic;
     }
 
-    public void setQualifierX(int qualifierX) {
-        this.qualifierX = qualifierX;
+    public void setBuildIdX(int buildIdX) {
+        this.buildIdX = buildIdX;
     }
 
-    public void setQualifierY(int qualifierY) {
-        this.qualifierY = qualifierY;
+    public void setBuildIdY(int buildIdY) {
+        this.buildIdY = buildIdY;
     }
 
-    public void setShowQualifier(boolean showQualifier) {
-        this.showQualifier = showQualifier;
+    public void setBuildId(String buildId) {
+       this.buildId = buildId;
     }
 }
