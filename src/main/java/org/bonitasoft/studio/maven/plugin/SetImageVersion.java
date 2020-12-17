@@ -5,15 +5,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2.0 of the License, or
  * (at your option) any later version.
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
  */
 package org.bonitasoft.studio.maven.plugin;
 
@@ -62,8 +59,6 @@ public class SetImageVersion {
 
     private float size;
     private String color = "#ffffff"; //white
-
-
 
     public void createImage() throws CreateImageException {
         configure();
@@ -115,7 +110,7 @@ public class SetImageVersion {
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        graphics.drawString(getVersionLabel(), getxLocation(), getyLocation());
+        graphics.drawString(stripSNAPSHOT(getVersionLabel()), getxLocation(), getyLocation());
         if (buildId != null && !buildId.isEmpty()) {
             graphics.setFont(configureQualifierFontStyle(bontitaBrandingFont));
             graphics.drawString(String.format("Build: %s", trimDot(buildId)), buildIdX, buildIdY);
@@ -124,7 +119,7 @@ public class SetImageVersion {
     }
 
     String trimDot(String label) {
-        return label.lastIndexOf(".") == label.length()-1 ? label.substring(0,label.length()-1) : label;
+        return label.lastIndexOf(".") == label.length() - 1 ? label.substring(0, label.length() - 1) : label;
     }
 
     private int getType() {
@@ -207,8 +202,9 @@ public class SetImageVersion {
         final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font customFont = getFont(ge);
         if (customFont == null) {
-            try (InputStream fontInputStream = getFontResourcePath() != null ? new FileInputStream(new File(getFontResourcePath()))
-                    : getDefaultFontInputStream()){
+            try (InputStream fontInputStream = getFontResourcePath() != null
+                    ? new FileInputStream(new File(getFontResourcePath()))
+                    : getDefaultFontInputStream()) {
                 customFont = Font.createFont(Font.TRUETYPE_FONT, fontInputStream);
                 ge.registerFont(customFont);
             }
@@ -225,23 +221,9 @@ public class SetImageVersion {
         return null;
     }
 
-    String stripVersionQualifier(String version) {
-        if (version != null) {
-            final String[] versions = version.split("\\.");
-            if (versions.length < 3) {
-                throw new IllegalArgumentException(String.format("Invalid version format: %s", version));
-            }
-            String newVersion = versions[0] + "." + versions[1];
-            String maintenanceVersion = versions[2];
-            if (maintenanceVersion.endsWith("-SNAPSHOT")) {
-                maintenanceVersion = maintenanceVersion.substring(0, maintenanceVersion.indexOf("-SNAPSHOT"));
-            }
-            //Version contains a tag id
-            if (maintenanceVersion.indexOf(".") != -1) {
-                final String[] splitTag = maintenanceVersion.split("\\.");
-                maintenanceVersion = splitTag[0];
-            }
-            return newVersion + "." + maintenanceVersion;
+    String stripSNAPSHOT(String version) {
+        if (version != null && version.endsWith("-SNAPSHOT")) {
+            version = version.substring(0, version.indexOf("-SNAPSHOT"));
         }
         return version;
     }
@@ -335,6 +317,6 @@ public class SetImageVersion {
     }
 
     public void setBuildId(String buildId) {
-       this.buildId = buildId;
+        this.buildId = buildId;
     }
 }

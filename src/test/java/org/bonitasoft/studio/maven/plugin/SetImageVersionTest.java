@@ -195,28 +195,13 @@ class SetImageVersionTest {
     }
 
     @Test
-    void should_format_version_to_3_digits_if_snapshot() throws Exception {
-        assertThat(setImageVersion.stripVersionQualifier("1.0.0-SNAPSHOT")).isEqualTo("1.0.0");
+    void should_strip_version_snapshot() throws Exception {
+        assertThat(setImageVersion.stripSNAPSHOT("1.0.0-SNAPSHOT")).isEqualTo("1.0.0");
     }
 
-    @Test
-    void should_format_version_to_3_digits_if_tag() throws Exception {
-        assertThat(setImageVersion.stripVersionQualifier("1.0.0.myTagId")).isEqualTo("1.0.0");
-    }
-
-    @Test
-    void should_format_version_to_3_digits_if_tag_with_specialChars() throws Exception {
-        assertThat(setImageVersion.stripVersionQualifier("1.0.0.myTag-Id")).isEqualTo("1.0.0");
-    }
-    
     @Test
     void should_trim_dot() throws Exception {
         assertThat(setImageVersion.trimDot("1.0.0.")).isEqualTo("1.0.0");
-    }
-
-    @Test
-    void should_throw_IllegalArgumentException_if_version_format_is_not_supported() throws Exception {
-        assertThrows(IllegalArgumentException.class, () ->  setImageVersion.stripVersionQualifier("1.0-SNAPSHOT"));
     }
 
 }
