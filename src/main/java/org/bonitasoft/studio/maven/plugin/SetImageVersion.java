@@ -118,7 +118,7 @@ public class SetImageVersion {
         graphics.drawString(getVersionLabel(), getxLocation(), getyLocation());
         if (buildId != null && !buildId.isEmpty()) {
             graphics.setFont(configureQualifierFontStyle(bontitaBrandingFont));
-            graphics.drawString(String.format("Build: %s", buildId), buildIdX, buildIdY);
+            graphics.drawString(String.format("Build: %s", trimDot(buildId)), buildIdX, buildIdY);
         }
         graphics.dispose();
     }
