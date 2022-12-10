@@ -40,7 +40,7 @@
 		<!-- Test -->
 		<junit-jupiter-engine.version>5.9.1</junit-jupiter-engine.version>
 		<jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
-		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+		<sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
 		<mockito-core.version>3.5.13</mockito-core.version>
 		<assertj-core.version>3.16.1</assertj-core.version>
 
