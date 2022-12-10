@@ -26,11 +26,10 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.bonitasoft.studio.maven.plugin.exception.CreateImageException;
 
 /**
- * @author Romain Bioteau
  * @goal generate
  * @phase generate-resources
  */
-@Mojo(defaultPhase = LifecyclePhase.GENERATE_RESOURCES, name = "create-image")
+@Mojo(defaultPhase = LifecyclePhase.GENERATE_RESOURCES, name = "create-image", threadSafe = true)
 public class SetImageVersionMojo extends AbstractMojo {
 
     @Parameter(required = true)
