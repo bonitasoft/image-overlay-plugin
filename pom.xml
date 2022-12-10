@@ -35,7 +35,7 @@
 		<maven.compiler.release>${java.version}</maven.compiler.release>
 		
 		<maven-plugin-api.version>3.6.3</maven-plugin-api.version>
-		<maven-plugin-annotations.version>3.6.0</maven-plugin-annotations.version>
+		<maven-plugin-annotations.version>3.7.0</maven-plugin-annotations.version>
 
 		<!-- Test -->
 		<junit-jupiter-engine.version>5.9.1</junit-jupiter-engine.version>
