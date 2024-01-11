@@ -46,7 +46,7 @@
 
 		<!-- Maven -->
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-		<maven-plugin-plugin.version>3.9.0</maven-plugin-plugin.version>
+		<maven-plugin-plugin.version>3.11.0</maven-plugin-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 		<maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
