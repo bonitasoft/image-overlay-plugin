@@ -42,7 +42,7 @@
 		<jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
 		<sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
 		<mockito-core.version>5.2.0</mockito-core.version>
-		<assertj-core.version>3.24.2</assertj-core.version>
+		<assertj-core.version>3.26.0</assertj-core.version>
 
 		<!-- Maven -->
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
